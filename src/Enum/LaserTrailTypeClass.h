@@ -17,7 +17,7 @@ public:
     Valueable<int> InitialDelay;
 
     LaserTrailTypeClass (const char* pTitle) : Enumerable<LaserTrailTypeClass>(pTitle),
-        IsHouseColor(true),
+        IsHouseColor(false),
         InnerColor({ 204, 64, 6 }),
         OuterColor({ 102, 32, 3 }),
         OuterSpread({ 0, 0, 0 }),
@@ -30,11 +30,12 @@ public:
 
     virtual ~LaserTrailTypeClass() override = default;
 
-	static void LoadListSection(CCINIClass * pINI);
-
-	virtual void LoadFromINI(CCINIClass *pINI) override;
+	static void LoadListSection(CCINIClass* pINI);
+	virtual void LoadFromINI(CCINIClass* pINI) override;
 	virtual void LoadFromStream(PhobosStreamReader& Stm);
 	virtual void SaveToStream(PhobosStreamWriter& Stm);
+
+    void SetHouseColor(HouseClass* pHouse);
 
 private:
 	template <typename T>

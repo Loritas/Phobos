@@ -1,16 +1,14 @@
 #include "LaserTrailTypeClass.h"
 
 #include <Utilities/TemplateDef.h>
-
+#include <HouseClass.h>
 
 Enumerable<LaserTrailTypeClass>::container_t Enumerable<LaserTrailTypeClass>::Array;
 
-// pretty nice, eh
 const char* Enumerable<LaserTrailTypeClass>::GetMainSection()
 {
     return "LaserTrailTypes";
 }
-
 
 void LaserTrailTypeClass::LoadListSection(CCINIClass * pINI)
 {
@@ -27,7 +25,7 @@ void LaserTrailTypeClass::LoadListSection(CCINIClass * pINI)
         trailType->LoadFromINI(pINI);
 }
 
-void LaserTrailTypeClass::LoadFromINI(CCINIClass * pINI)
+void LaserTrailTypeClass::LoadFromINI(CCINIClass* pINI)
 {
     const char* section = this->Name;
 
@@ -44,10 +42,24 @@ void LaserTrailTypeClass::LoadFromINI(CCINIClass * pINI)
     this->Distance.Read(exINI, section, "Distance");
     this->IgnoreVertical.Read(exINI, section, "IgnoreVertical");
     this->InitialDelay.Read(exINI, section, "InitialDelay");
+
+    /*
+        CoordStruct tempFLH;
+        for (int i = 0; i <= FLHList.size(); i++)
+        {
+            if (detail::read<CoordStruct>(tempFLH, exINI, section, "LaserTailFLH" + i))
+            {
+                if (i == FLHList.size())
+                    FLHList.push_back(tempFLH);
+                else
+                    FLHList[i] = tempFLH;
+            }
+        }
+    */
 }
 
 template <typename T>
-void LaserTrailTypeClass::Serialize(T & Stm)
+void LaserTrailTypeClass::Serialize(T& Stm)
 {
     Stm
         .Process(this->IsHouseColor)
@@ -62,12 +74,21 @@ void LaserTrailTypeClass::Serialize(T & Stm)
         ;
 };
 
-void LaserTrailTypeClass::LoadFromStream(PhobosStreamReader & Stm)
+void LaserTrailTypeClass::LoadFromStream(PhobosStreamReader& Stm)
 {
     this->Serialize(Stm);
 }
 
-void LaserTrailTypeClass::SaveToStream(PhobosStreamWriter & Stm)
+void LaserTrailTypeClass::SaveToStream(PhobosStreamWriter& Stm)
 {
     this->Serialize(Stm);
+}
+
+void LaserTrailTypeClass::SetHouseColor(HouseClass* pHouse) 
+{
+    auto c = pHouse->LaserColor;
+    
+    this->InnerColor = c;
+    this->OuterColor = ColorStruct { (BYTE)(c.R / 2), (BYTE)(c.G / 2), (BYTE)(c.B / 2) };
+    this->OuterSpread = ColorStruct { 0, 0, 0 };
 }
