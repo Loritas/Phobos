@@ -26,6 +26,14 @@ public:
             this->Type->SetHouseColor(pHouse);
     }
 
+    LaserTrailClass() :
+        Type(),
+        Visible(false),
+        // Delay(pTrailType->InitialDelay),
+        // Ready(pTrailType->InitialDelay <= 0),
+        LastLocation()
+    { }
+
 	virtual void LoadFromStream(PhobosStreamReader& Stm);
 	virtual void SaveToStream(PhobosStreamWriter& Stm);
 

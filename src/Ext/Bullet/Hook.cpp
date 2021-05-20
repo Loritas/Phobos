@@ -8,8 +8,8 @@
 DEFINE_HOOK(4666F7, BulletClass_AI, 6)
 {
 	GET(BulletClass*, pBullet, EBP);
-
 	auto pBulletExt = BulletExt::ExtMap.Find(pBullet);
+
 	if (pBulletExt && pBulletExt->ShouldIntercept)
 	{
 		pBullet->Detonate(pBullet->GetCoords());
@@ -33,6 +33,9 @@ DEFINE_HOOK(4666F7, BulletClass_AI, 6)
 
 	if (pBulletExt && pBulletExt->Intercepted)
 		pBulletExt->ShouldIntercept = true;
+    
+    if (pBulletExt && pBulletExt->LaserTrail)
+        pBulletExt->LaserTrail->Draw(pBullet->GetCoords());
 
 	return 0;
 }

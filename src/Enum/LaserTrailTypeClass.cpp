@@ -10,21 +10,6 @@ const char* Enumerable<LaserTrailTypeClass>::GetMainSection()
     return "LaserTrailTypes";
 }
 
-void LaserTrailTypeClass::LoadListSection(CCINIClass * pINI)
-{
-    for (int i = 0; i < pINI->GetKeyCount(GetMainSection()); ++i)
-    {
-        if (pINI->ReadString(GetMainSection(), pINI->GetKeyName(GetMainSection(), i), "", Phobos::readBuffer))
-        {
-            FindOrAllocate(Phobos::readBuffer);
-            Debug::Log("LaserTrailTypeClass :: LoadListSection check [%s] \n", Phobos::readBuffer);
-        }
-    }
-
-    for (auto &trailType: Array)
-        trailType->LoadFromINI(pINI);
-}
-
 void LaserTrailTypeClass::LoadFromINI(CCINIClass* pINI)
 {
     const char* section = this->Name;
@@ -41,7 +26,7 @@ void LaserTrailTypeClass::LoadFromINI(CCINIClass* pINI)
     this->Thickness.Read(exINI, section, "Thickness");
     this->Distance.Read(exINI, section, "Distance");
     this->IgnoreVertical.Read(exINI, section, "IgnoreVertical");
-    this->InitialDelay.Read(exINI, section, "InitialDelay");
+    // this->InitialDelay.Read(exINI, section, "InitialDelay");
 
     /*
         CoordStruct tempFLH;
@@ -70,7 +55,7 @@ void LaserTrailTypeClass::Serialize(T& Stm)
         .Process(this->Thickness)
         .Process(this->Distance)
         .Process(this->IgnoreVertical)
-        .Process(this->InitialDelay)
+        // .Process(this->InitialDelay)
         ;
 };
 

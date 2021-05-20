@@ -42,8 +42,6 @@ public:
 
 	static void AddDefaults();
 
-	static void LoadListSection(CCINIClass * pINI);
-
 	WarheadTypeClass* GetWarhead() const
 	{
 		return this->RadWarhead.Get(RulesClass::Instance->RadSiteWarhead);

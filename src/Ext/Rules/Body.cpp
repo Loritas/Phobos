@@ -1,9 +1,11 @@
 #include "Body.h"
 #include "../Side/Body.h"
 #include "../../Utilities/TemplateDef.h"
-#include <Enum/RadTypeClass.h>
 #include <FPSCounter.h>
 #include <GameOptionsClass.h>
+
+#include <Enum/RadTypeClass.h>
+#include <Enum/LaserTrailTypeClass.h>
 
 template<> const DWORD Extension<RulesClass>::Canary = 0x12341234;
 std::unique_ptr<RulesExt::ExtData> RulesExt::Data = nullptr;
@@ -25,7 +27,9 @@ void RulesExt::LoadFromINIFile(RulesClass* pThis, CCINIClass* pINI)
 
 void RulesExt::LoadBeforeTypeData(RulesClass* pThis, CCINIClass* pINI)
 {
-    RadTypeClass::LoadListSection(pINI);
+    RadTypeClass::LoadFromINIList(pINI);
+    LaserTrailTypeClass::LoadFromINIList(pINI);
+
     Data->LoadBeforeTypeData(pThis, pINI);
 }
 

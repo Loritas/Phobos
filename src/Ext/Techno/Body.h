@@ -19,8 +19,8 @@ public:
     public:
         Valueable<BulletClass*> InterceptedBullet;
         std::unique_ptr<ShieldTechnoClass> ShieldData;
-
 		Valueable<bool> WasCloaked;
+        
 		ExtData(TechnoClass* OwnerObject) : Extension<TechnoClass>(OwnerObject),
 			InterceptedBullet(nullptr),
 			ShieldData(),
@@ -58,6 +58,8 @@ public:
 
     static bool IsHarvesting(TechnoClass* pThis);
     static bool HasAvailableDock(TechnoClass* pThis);
+
+    static CoordStruct GetFLHAbsoluteCoords(FootClass* pThis, CoordStruct flh);
 
     static void TransferMindControlOnDeploy(TechnoClass* pTechnoFrom, TechnoClass* pTechnoTo);
 

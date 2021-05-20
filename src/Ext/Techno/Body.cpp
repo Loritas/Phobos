@@ -7,6 +7,7 @@
 #include <ScenarioClass.h>
 #include <SpawnManagerClass.h>
 #include <InfantryClass.h>
+#include <Unsorted.h>
 
 #include "../BulletType/Body.h"
 
@@ -170,6 +171,54 @@ bool TechnoExt::HasAvailableDock(TechnoClass* pThis)
     }
 
     return false;
+}
+
+CoordStruct TechnoExt::GetFLHAbsoluteCoords(FootClass* pThis, CoordStruct flh)
+{
+    CoordStruct location = pThis->GetCoords();
+
+    if (flh == CoordStruct::Empty)
+        return location;
+
+    Matrix3DStruct* discardMtx;
+    Matrix3DStruct* mtx = pThis->Locomotor ? pThis->Locomotor->Draw_Matrix(discardMtx, 0) : new Matrix3DStruct(true);
+    mtx->Translate(flh.X, flh.Y, flh.Z);
+
+    Vector3D<float> nullvec = { 0.0, 0.0, 0.0 };
+    Vector3D<float> result;
+    Game::MatrixMultiply(&result, mtx, &nullvec);
+
+    location += { (int)result.X, (int)result.Y, (int)result.Z };
+
+    /*
+    #pragma region Z Rotation
+
+    // not sure if actually correct, something looks swapped - Kerbiter
+
+    double xF = flh.X * Math::cos(-radZ);
+    double yF = flh.X * Math::sin(-radZ);
+    CoordStruct offsetF = CoordStruct { (int)xF, (int)yF, 0};
+
+    double xL = flh.Y * Math::sin(radZ);
+    double yL = flh.Y * Math::cos(radZ);
+    CoordStruct offsetL = CoordStruct { (int)xL, (int)yL, 0 };
+
+    location += offsetF + offsetL + CoordStruct { 0, 0, flh.Z };
+
+    #pragma endregion
+
+    #pragma region X Rotation
+
+    #pragma endregion
+
+    #pragma region Y Rotation
+
+    #pragma endregion
+
+    // TODO X and Y rot
+    */
+
+    return location;
 }
 
 // =============================

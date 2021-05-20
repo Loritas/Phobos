@@ -1,6 +1,9 @@
 #include "Body.h"
-#include "../RadSite/Body.h"
-#include "../WeaponType/Body.h"
+
+#include <Ext/RadSite/Body.h>
+#include <Ext/WeaponType/Body.h>
+#include <Ext/BulletType/Body.h>
+
 template<> const DWORD Extension<BulletClass>::Canary = 0x2A2A2A2A;
 BulletExt::ExtContainer BulletExt::ExtMap;
 
@@ -47,6 +50,25 @@ void BulletExt::ExtData::ApplyRadiationToCell(CellStruct Cell, int Spread, int R
 	}
 }
 
+void BulletExt::ExtData::Initialize() 
+{ 
+    BulletClass* pBullet = this->OwnerObject();
+    BulletTypeClass* pType = static_cast<BulletTypeClass*>(pBullet->GetType());
+	auto pTypeExt = BulletTypeExt::ExtMap.Find(pType);
+
+    if (!pTypeExt->LaserTrailType)
+    {
+        this->LaserTrail = nullptr;
+        return;
+    }
+    
+    HouseClass* owner = nullptr;
+    if (pBullet->Owner)
+        owner = pBullet->Owner->Owner;
+
+    this->LaserTrail = std::make_unique<LaserTrailClass>(pTypeExt->LaserTrailType, owner);
+}
+
 
 // =============================
 // load / save
@@ -57,6 +79,7 @@ void BulletExt::ExtData::Serialize(T& Stm) {
 	Stm
 		.Process(this->Intercepted)
 		.Process(this->ShouldIntercept)
+        .Process(this->LaserTrail)
 		;
 }
 
@@ -73,8 +96,7 @@ void BulletExt::ExtData::SaveToStream(PhobosStreamWriter& Stm) {
 // =============================
 // container
 
-BulletExt::ExtContainer::ExtContainer() : Container("BulletClass") {
-}
+BulletExt::ExtContainer::ExtContainer() : Container("BulletClass") { }
 
 BulletExt::ExtContainer::~ExtContainer() = default;
 

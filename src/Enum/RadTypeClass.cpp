@@ -17,21 +17,6 @@ void RadTypeClass::AddDefaults()
     FindOrAllocate("Radiation");
 }
 
-void RadTypeClass::LoadListSection(CCINIClass * pINI)
-{
-    for (int i = 0; i < pINI->GetKeyCount(GetMainSection()); ++i)
-    {
-        if (pINI->ReadString(GetMainSection(), pINI->GetKeyName(GetMainSection(), i), "", Phobos::readBuffer))
-        {
-            FindOrAllocate(Phobos::readBuffer);
-            Debug::Log("RadTypeClass :: LoadListSection check [%s] \n", Phobos::readBuffer);
-        }
-    }
-
-    for (auto &radType: Array)
-        radType->LoadFromINI(pINI);
-}
-
 void RadTypeClass::LoadFromINI(CCINIClass * pINI)
 {
     const char* section = this->Name;
